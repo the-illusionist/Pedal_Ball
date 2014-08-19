@@ -1,0 +1,224 @@
+<html>
+       <head>
+           <script src="js/jquery.js"></script>
+           <script src="js/keys1.js"></script>
+           <script src="js/keys2.js"></script>
+           <style>
+               body
+               {
+                   background-color: white;
+               }
+               #canvas
+               {
+			       
+			       position:absolute;
+                   top:30;
+                   left:150;				   
+				   border: 20px ridge #1a11d5;
+                   background-color: #000000;
+				   font=' bold 30pt Georgia';
+               }
+			  #canvas_2{
+			   position:absolute;
+                   top:540;
+                   left:150;
+			   z-index:200;
+			     border: 20px ridge #1a11d5;
+			   }
+			   .canv{
+			   position:absolute;
+			   top:70%;
+			   left:60%
+               z-index:400;
+               color:green;
+               font-face:'bold 30pt Georgia';			   
+			   }
+           </style>
+       </head>
+       <body>
+	   <canvas id="canvas_2" height="50" width="1000"></canvas>
+	   <div class="canv"></div>
+			<script>
+			//created by abhishek
+   
+               var canvas = document.getElementById("canvas_2");
+               var context = canvas.getContext("2d");
+               context.fillStyle = "green";
+               context.font = "bold 25px Arial";
+
+	        
+	            var CANVAS_WIDTH = 500*2;
+				var CANVAS_HEIGHT = 280*2;
+				
+				var score = 0;
+				var enemy_x=100;
+				var enemy_y=100;
+				var line1=
+				{
+                   color: "#1a11d5",
+                   x: 0,
+                   y: CANVAS_HEIGHT-70,
+                   width: 1000,
+                   height: 10,
+                   draw: function() {
+                       canvas.fillStyle = this.color;
+                       canvas.fillRect(this.x, this.y, this.width, this.height);
+                   }
+				   }
+						   
+                var player_d=
+				{
+                   color: "#18ea1d",
+                   x: CANVAS_WIDTH/2-50,
+                   y: CANVAS_HEIGHT-80,
+				   
+                   width: 100,
+                   height: 10,
+                   draw: function() {
+                       canvas.fillStyle = this.color;
+                       canvas.fillRect(this.x, this.y, this.width, this.height);
+                   }
+				 }
+                
+               var enemy = {
+                   x:(Math.floor((Math.random() * 40) + 1))*10,
+                   y:10,
+				  
+                   speed:10,
+				   speeed:10,
+                   draw: function()
+				   {
+				      
+					   canvas.beginPath();
+                       canvas.fillStyle="#ea2718";
+  
+                       canvas.arc(enemy.x,enemy.y,10,0,Math.PI*2,true);
+                      canvas.closePath();
+                      canvas.fill();
+                   },
+				   
+                   update: function()
+				   {    
+			            this.y +=this.speed;
+						enemy_y=this.y;	
+						
+						this.x +=this.speeed;
+						enemy_x=this.x;
+						
+                       if(this.y+10==player_d.y && this.x>=player_d.x && this.x<=player_d.x+100)
+                       {					   
+						  this.speed = -this.speed;
+						  score +=100;
+                       }
+					   if(this.y<=10)
+					   {
+						  this.speed = -this.speed;
+						  
+						 
+                       }
+					   if(this.x<=10)
+					   {
+					      
+						  this.speeed = -this.speeed;
+						  
+                       }
+					   if(this.x>=CANVAS_WIDTH-10)
+					   {
+					      
+						  this.speeed = -this.speeed;
+						  
+                       }
+					  
+					  }
+                    }
+               //created by abhishek
+               var canvasElement = $("<canvas width='" + CANVAS_WIDTH + "' height='" + CANVAS_HEIGHT + " '' id='canvas'></canvas>");
+               var canvas = canvasElement.get(0).getContext("2d");
+               canvasElement.appendTo('body');
+			   
+			   
+               var base=0;
+               var FPS = 50;
+               var threading=setInterval(function()
+										{
+											base++;
+											update();
+											draw();
+										}, 1000/FPS)
+										  
+               
+                  
+               function update(){
+			   
+		
+			     
+			   if ((keydown.left) || (keydown.right))
+			   {
+                   if (keydown.left)
+				   {
+						 
+						 player_d.x-=20;
+					    
+					   
+                       if(player_d.x<=0)
+					   {
+                           player_d.x=0; 
+                           						   
+                       }
+					   
+                   }
+
+                   if (keydown.right)
+				   {
+					  
+					  player_d.x+=20;
+					   
+
+                       if(player_d.x>=CANVAS_WIDTH-100)
+					   {
+                           player_d.x=CANVAS_WIDTH-100;
+						   
+                       }
+					   
+                   }
+                }   
+			
+                   enemy.update(); 
+				 }  
+               function draw()
+			    {
+                  canvas.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+				
+				 context.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+				 context.fillText("Level 2", 35, 35);
+				 context.fillText("Score:", 830, 35);
+				 context.fillText( score, 920, 35);
+				 
+				  if (enemy_y==CANVAS_HEIGHT-80)
+                   {
+                       clearInterval(threading);
+                       canvas.font=' bold 30pt Georgia';
+                       canvas.fillText("Game Over. You lost! Press F5",180,250);
+					   canvas.fillText("Your Score:  ",300,300);
+					   canvas.fillText( score ,570,300);
+					   
+                   }
+				   if (score==2500)
+                   {
+                       clearInterval(threading);
+                       canvas.font=' normal 30pt Georgia';
+                       canvas.fillText("Congratulation!!! you have completed Level 2...",100,250);
+					   canvas.fillText("Your Score:  ",330,300);
+					   canvas.fillText( score ,550,300);
+					   }
+                   
+				   player_d.draw();
+                   enemy.draw();
+				   line1.draw();
+               }
+			   
+              //created by abhishek
+			  
+           </script>
+       </body>
+</html>
